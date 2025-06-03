@@ -118,7 +118,7 @@ def iterate_pagerank(corpus, damping_factor):
 
     pages = list(corpus.keys())
 
-    # Dangling node handling: page with no links should point to all pages
+    # Dangling node handling: page with no links should point to all pages in the ecosystem
     for page in corpus.keys():
         if not corpus[page]:
             corpus[page] = pages
@@ -132,7 +132,7 @@ def iterate_pagerank(corpus, damping_factor):
         new_page_ranks = {}
         for page in pages:
 
-            # PR (page)
+            # Calculate the PageRank of the current page, PR (page)
 
             # Get pages that link to current page
             parent_pages = []
@@ -140,10 +140,10 @@ def iterate_pagerank(corpus, damping_factor):
                 if page in corpus[parent_page]:
                     parent_pages.append(parent_page)
 
-            # Calculate the random jump probability 
+            # Calculate the random jump probability
             random_jump_prob = (1 - damping_factor) / pages_count
-            
-            # Calculate the link-based weighted probability 
+
+            # Calculate the link-based weighted probability of each possible parent
             rank_contribution_prob_sum = 0
             for parent_page in parent_pages:
                 parent_page_rank = page_ranks[parent_page]
@@ -154,17 +154,16 @@ def iterate_pagerank(corpus, damping_factor):
             new_rank = random_jump_prob + rank_contribution_prob
             new_page_ranks[page] = new_rank
 
-        # Check if we have the desired 0.001 for all pages
+        # Check if we have the desired converge tolerance of 0.001 for all pages
         convergence = True
         for page in pages:
             if abs(page_ranks[page] - new_page_ranks[page]) > 0.001:
                 convergence = False
 
         if convergence:
-            print(new_page_ranks)
             return new_page_ranks
 
-        # Update page rank when accuracy is still under 0.001
+        # Update page rank when converge tolerance is still under 0.001
         page_ranks = new_page_ranks
 
 
