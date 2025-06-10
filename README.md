@@ -1,4 +1,4 @@
-# PageRank Algorithm Implementation
+# PageRank: AI Algorithm for ranking web pages
 
 ## Overview
 
